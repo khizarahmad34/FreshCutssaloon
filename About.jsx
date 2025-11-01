@@ -1,149 +1,173 @@
+import { useEffect, useState } from 'react';
 import './About.css';
 
-const About = () => {
+function About() {
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[id^="animate-"]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const timeline = [
+    { year: '2000', title: 'The Beginning', description: 'Savoria opened its doors with a vision to redefine fine dining.' },
+    { year: '2005', title: 'First Michelin Star', description: 'Recognized for culinary excellence with our first Michelin star.' },
+    { year: '2012', title: 'Expansion', description: 'Opened our second location and introduced the chef\'s table experience.' },
+    { year: '2018', title: 'Three Stars', description: 'Achieved the prestigious three Michelin star rating.' },
+    { year: '2023', title: 'Innovation', description: 'Launched our sustainable dining initiative and farm partnerships.' }
+  ];
+
+  const stats = [
+    { number: '20+', label: 'Years of Excellence' },
+    { number: '50K+', label: 'Happy Guests' },
+    { number: '15+', label: 'Awards Won' },
+    { number: '100+', label: 'Signature Dishes' }
+  ];
+
   return (
     <div className="about-page">
       <section className="about-hero">
+        <div className="overlay"></div>
         <div className="container">
-          <h1 className="page-title fade-in-up">About FreshCuts</h1>
-          <p className="page-subtitle fade-in-up">Where tradition meets modern style</p>
+          <h1 className="fade-in-up">Our Story</h1>
+          <p className="fade-in-up delay-2">A journey of passion, excellence, and culinary innovation</p>
         </div>
       </section>
 
-      <section className="section story-section">
+      <section className="section about-intro">
         <div className="container">
-          <div className="story-content">
-            <div className="story-text">
-              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: 'calc(var(--spacing-unit) * 3)' }}>
-                Our Story
-              </h2>
-              <p className="story-paragraph">
-                Founded in 2020, FreshCuts emerged from a simple vision: to create a premium grooming destination where modern men could experience exceptional service in a sophisticated yet welcoming environment.
+          <div className="about-grid">
+            <div 
+              id="animate-intro-content" 
+              className={`about-content ${isVisible['animate-intro-content'] ? 'fade-in-up' : ''}`}
+            >
+              <h2 className="section-title">Welcome to Savoria</h2>
+              <div className="accent-line"></div>
+              <p>
+                Founded in 2000, Savoria has been at the forefront of fine dining, combining 
+                traditional culinary techniques with modern innovation. Our commitment to excellence 
+                has earned us recognition from critics and diners alike.
               </p>
-              <p className="story-paragraph">
-                What started as a single chair operation has grown into a full-service salon with a team of award-winning stylists. We've stayed true to our core values of precision, professionalism, and personalized attention to every client who walks through our doors.
+              <p>
+                Every dish we create tells a story—of carefully sourced ingredients, masterful 
+                preparation, and an unwavering dedication to providing an unforgettable dining 
+                experience. We believe that great food brings people together and creates lasting memories.
               </p>
-              <p className="story-paragraph">
-                Today, FreshCuts stands as a beacon of excellence in men's grooming, combining traditional barbering techniques with contemporary styling to deliver looks that make our clients feel confident and sharp.
+              <p>
+                Our team of award-winning chefs works tirelessly to push the boundaries of culinary 
+                art while honoring the traditions that make dining special. From farm to table, 
+                we ensure every element meets our exacting standards.
               </p>
             </div>
-            <div className="story-image" style={{
-              backgroundImage: `url('https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg?auto=compress&cs=tinysrgb&w=800')`
-            }}></div>
+            <div 
+              id="animate-intro-image" 
+              className={`about-image ${isVisible['animate-intro-image'] ? 'scale-in delay-2' : ''}`}
+            >
+              <div className="image-placeholder">
+                <span className="placeholder-icon">🏛️</span>
+                <p>Our Restaurant</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section values-section">
+      <section className="section stats-section">
         <div className="container">
-          <h2 className="section-title">Our Values</h2>
-          <div className="values-grid">
-            <div className="value-card">
-              <div className="value-icon">💎</div>
-              <h3>Excellence</h3>
-              <p>We never compromise on quality. Every cut, every style, every service is executed with meticulous attention to detail.</p>
-            </div>
-            <div className="value-card">
-              <div className="value-icon">🤝</div>
-              <h3>Integrity</h3>
-              <p>Honest advice, transparent pricing, and genuine care for our clients' satisfaction guide everything we do.</p>
-            </div>
-            <div className="value-card">
-              <div className="value-icon">🎯</div>
-              <h3>Innovation</h3>
-              <p>We stay ahead of trends while honoring classic techniques, ensuring our clients always look their best.</p>
-            </div>
-            <div className="value-card">
-              <div className="value-icon">❤️</div>
-              <h3>Community</h3>
-              <p>More than a salon, we're a community hub where lasting relationships are built one haircut at a time.</p>
-            </div>
+          <div className="stats-grid grid grid-4">
+            {stats.map((stat, index) => (
+              <div 
+                key={index}
+                id={`animate-stat-${index}`}
+                className={`stat-card ${isVisible[`animate-stat-${index}`] ? 'scale-in' : ''}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <h3 className="stat-number">{stat.number}</h3>
+                <p className="stat-label">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section timeline-section">
+        <div className="container">
+          <h2 className="section-title">Our Journey</h2>
+          <p className="section-subtitle">Milestones that shaped our legacy</p>
+          <div className="timeline">
+            {timeline.map((item, index) => (
+              <div 
+                key={index}
+                id={`animate-timeline-${index}`}
+                className={`timeline-item ${isVisible[`animate-timeline-${index}`] ? 'fade-in-up' : ''}`}
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className="timeline-year">{item.year}</div>
+                <div className="timeline-content">
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="section mission-section">
         <div className="container">
-          <div className="mission-content">
-            <div className="mission-image" style={{
-              backgroundImage: `url('https://images.pexels.com/photos/1319460/pexels-photo-1319460.jpeg?auto=compress&cs=tinysrgb&w=800')`
-            }}></div>
-            <div className="mission-text">
-              <h2 className="mission-title">Our Mission</h2>
-              <p className="mission-description">
-                To empower men to look and feel their absolute best through expert grooming services, premium products, and an unmatched customer experience.
+          <div className="mission-grid grid grid-3">
+            <div 
+              id="animate-mission-1" 
+              className={`mission-card card ${isVisible['animate-mission-1'] ? 'fade-in-up' : ''}`}
+            >
+              <div className="mission-icon">🎯</div>
+              <h3>Our Mission</h3>
+              <p>
+                To create exceptional dining experiences that celebrate culinary artistry, 
+                quality ingredients, and impeccable service.
               </p>
-              <div className="mission-stats">
-                <div className="mission-stat">
-                  <div className="mission-stat-number">5000+</div>
-                  <div className="mission-stat-label">Satisfied Clients</div>
-                </div>
-                <div className="mission-stat">
-                  <div className="mission-stat-number">10K+</div>
-                  <div className="mission-stat-label">Haircuts Delivered</div>
-                </div>
-                <div className="mission-stat">
-                  <div className="mission-stat-number">4.9</div>
-                  <div className="mission-stat-label">Average Rating</div>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section location-section">
-        <div className="container">
-          <h2 className="section-title">Visit Us</h2>
-          <div className="location-content">
-            <div className="location-info">
-              <div className="location-item">
-                <div className="location-icon">📍</div>
-                <div>
-                  <h4>Address</h4>
-                  <p>123 Barber Street<br/>New York, NY 10001</p>
-                </div>
-              </div>
-              <div className="location-item">
-                <div className="location-icon">📞</div>
-                <div>
-                  <h4>Phone</h4>
-                  <p>(555) 123-4567</p>
-                </div>
-              </div>
-              <div className="location-item">
-                <div className="location-icon">📧</div>
-                <div>
-                  <h4>Email</h4>
-                  <p>info@freshcuts.com</p>
-                </div>
-              </div>
-              <div className="location-item">
-                <div className="location-icon">🕐</div>
-                <div>
-                  <h4>Hours</h4>
-                  <p>
-                    Mon - Fri: 9am - 8pm<br/>
-                    Saturday: 9am - 9pm<br/>
-                    Sunday: 10am - 6pm
-                  </p>
-                </div>
-              </div>
+            <div 
+              id="animate-mission-2" 
+              className={`mission-card card ${isVisible['animate-mission-2'] ? 'fade-in-up delay-2' : ''}`}
+            >
+              <div className="mission-icon">👁️</div>
+              <h3>Our Vision</h3>
+              <p>
+                To be the world's most celebrated restaurant, setting new standards in 
+                fine dining and culinary innovation.
+              </p>
             </div>
-            <div className="location-map">
-              <div className="map-placeholder">
-                <div className="map-text">
-                  <span className="map-pin">📍</span>
-                  <p>FreshCuts Salon</p>
-                  <span className="map-address">123 Barber Street, New York</span>
-                </div>
-              </div>
+            <div 
+              id="animate-mission-3" 
+              className={`mission-card card ${isVisible['animate-mission-3'] ? 'fade-in-up delay-3' : ''}`}
+            >
+              <div className="mission-icon">💎</div>
+              <h3>Our Values</h3>
+              <p>
+                Excellence, integrity, sustainability, and a passion for creating 
+                memorable moments for every guest.
+              </p>
             </div>
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
 
 export default About;

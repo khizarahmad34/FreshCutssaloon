@@ -1,152 +1,215 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Pricing.css';
 
-const Pricing = () => {
-  const services = [
-    { name: 'Basic Haircut', price: '$25', duration: '20 min' },
-    { name: 'Classic Haircut', price: '$35', duration: '30 min' },
-    { name: 'Premium Cut & Style', price: '$50', duration: '45 min' },
-    { name: 'Buzz Cut', price: '$20', duration: '15 min' },
-    { name: 'Kids Haircut (Under 12)', price: '$22', duration: '25 min' },
-    { name: 'Beard Trim', price: '$20', duration: '15 min' },
-    { name: 'Beard Trim & Shape', price: '$25', duration: '20 min' },
-    { name: 'Hot Towel Shave', price: '$40', duration: '30 min' },
-    { name: 'Beard & Haircut Combo', price: '$55', duration: '50 min' },
-    { name: 'Hair Coloring', price: '$75+', duration: '90 min' },
-    { name: 'Highlights', price: '$85+', duration: '120 min' },
-    { name: 'Scalp Treatment', price: '$30', duration: '25 min' },
-    { name: 'Hair Styling', price: '$25', duration: '20 min' },
-    { name: 'Eyebrow Trim', price: '$10', duration: '10 min' }
+function Pricing() {
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[id^="animate-"]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const packages = [
+    {
+      name: 'Lunch Special',
+      price: '$45',
+      period: 'per person',
+      description: 'Perfect for a midday culinary escape',
+      features: [
+        'Choice of Appetizer',
+        'Main Course Selection',
+        'Dessert or Coffee',
+        'Complimentary Bread Basket',
+        'Available Mon-Fri 11AM-3PM'
+      ],
+      icon: '☀️',
+      popular: false
+    },
+    {
+      name: 'Dinner Experience',
+      price: '$85',
+      period: 'per person',
+      description: 'Our signature dining experience',
+      features: [
+        'Amuse-Bouche',
+        'Choice of Appetizer',
+        'Main Course Selection',
+        'Dessert Selection',
+        'Coffee or Tea',
+        'Complimentary Wine Pairing'
+      ],
+      icon: '🌙',
+      popular: true
+    },
+    {
+      name: 'Chef\'s Tasting Menu',
+      price: '$150',
+      period: 'per person',
+      description: 'An unforgettable culinary journey',
+      features: [
+        '7-Course Tasting Menu',
+        'Wine Pairing',
+        'Amuse-Bouche & Palate Cleansers',
+        'Chef\'s Special Creations',
+        'Personalized Menu Card',
+        'Meet the Chef Experience'
+      ],
+      icon: '⭐',
+      popular: false
+    }
   ];
 
-  const memberships = [
+  const specialOffers = [
     {
-      name: 'Bronze',
-      price: '$79',
-      period: '/month',
-      benefits: [
-        '2 Haircuts per month',
-        '10% off all services',
-        'Priority booking',
-        'Birthday discount'
-      ]
+      title: 'Happy Hour',
+      time: '4:00 PM - 7:00 PM',
+      description: 'Enjoy 50% off on selected appetizers and cocktails',
+      icon: '🍸'
     },
     {
-      name: 'Silver',
-      price: '$129',
-      period: '/month',
-      benefits: [
-        '4 Haircuts per month',
-        '15% off all services',
-        '1 Free beard trim',
-        'Priority booking',
-        'Free styling products',
-        'Birthday gift'
-      ],
-      featured: true
+      title: 'Weekend Brunch',
+      time: 'Sat-Sun 10:00 AM - 2:00 PM',
+      description: 'Unlimited brunch buffet with champagne for $55 per person',
+      icon: '🥂'
     },
     {
-      name: 'Gold',
-      price: '$199',
-      period: '/month',
-      benefits: [
-        'Unlimited haircuts',
-        '20% off all services',
-        'Free beard grooming',
-        'VIP booking',
-        'Premium products',
-        'Complimentary drinks',
-        'Exclusive events access'
-      ]
+      title: 'Wine Wednesday',
+      time: 'Every Wednesday',
+      description: 'Half price on all bottles of wine with dinner',
+      icon: '🍷'
+    },
+    {
+      title: 'Birthday Special',
+      time: 'Any Day',
+      description: 'Complimentary dessert for birthday celebrations',
+      icon: '🎂'
     }
   ];
 
   return (
     <div className="pricing-page">
       <section className="pricing-hero">
+        <div className="overlay"></div>
         <div className="container">
-          <h1 className="page-title fade-in-up">Our Pricing</h1>
-          <p className="page-subtitle fade-in-up">Transparent pricing for premium services</p>
+          <h1 className="fade-in-up">Pricing & Packages</h1>
+          <p className="fade-in-up delay-2">Exceptional value for an extraordinary experience</p>
         </div>
       </section>
 
-      <section className="section services-pricing-section">
+      <section className="section packages-section">
         <div className="container">
-          <h2 className="section-title">Services Menu</h2>
-          <div className="pricing-menu">
-            {services.map((service, index) => (
-              <div key={index} className="menu-item" style={{ animationDelay: `${index * 0.03}s` }}>
-                <div className="menu-item-info">
-                  <h4 className="menu-item-name">{service.name}</h4>
-                  <span className="menu-item-duration">{service.duration}</span>
+          <h2 className="section-title">Dining Packages</h2>
+          <p className="section-subtitle">Choose the perfect experience for your occasion</p>
+          
+          <div className="packages-grid">
+            {packages.map((pkg, index) => (
+              <div 
+                key={index}
+                id={`animate-package-${index}`}
+                className={`package-card card ${pkg.popular ? 'popular' : ''} ${isVisible[`animate-package-${index}`] ? 'scale-in' : ''}`}
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                {pkg.popular && <div className="popular-badge">Most Popular</div>}
+                <div className="package-icon">{pkg.icon}</div>
+                <h3>{pkg.name}</h3>
+                <div className="package-price">
+                  <span className="price">{pkg.price}</span>
+                  <span className="period">{pkg.period}</span>
                 </div>
-                <div className="menu-item-line"></div>
-                <div className="menu-item-price">{service.price}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section memberships-section">
-        <div className="container">
-          <h2 className="section-title">Membership Plans</h2>
-          <p className="memberships-subtitle">Save more with our exclusive membership options</p>
-          <div className="memberships-grid">
-            {memberships.map((plan, index) => (
-              <div key={index} className={`membership-card ${plan.featured ? 'featured' : ''}`}>
-                {plan.featured && <div className="membership-ribbon">Most Popular</div>}
-                <div className="membership-header">
-                  <h3 className="membership-name">{plan.name}</h3>
-                  <div className="membership-price">
-                    <span className="price-amount">{plan.price}</span>
-                    <span className="price-period">{plan.period}</span>
-                  </div>
-                </div>
-                <ul className="membership-benefits">
-                  {plan.benefits.map((benefit, idx) => (
-                    <li key={idx}>{benefit}</li>
+                <p className="package-description">{pkg.description}</p>
+                <ul className="package-features">
+                  {pkg.features.map((feature, i) => (
+                    <li key={i}>
+                      <span className="check-icon">✓</span>
+                      {feature}
+                    </li>
                   ))}
                 </ul>
-                <button className="membership-button">Choose Plan</button>
+                <Link to="/contact" className="btn btn-primary btn-full">
+                  Reserve Now
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section faq-section">
+      <section className="section offers-section">
         <div className="container">
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <div className="faq-grid">
-            <div className="faq-item">
-              <h4 className="faq-question">Do I need an appointment?</h4>
-              <p className="faq-answer">
-                While walk-ins are welcome, we recommend booking an appointment to ensure minimal wait time and secure your preferred stylist.
-              </p>
+          <h2 className="section-title">Special Offers</h2>
+          <p className="section-subtitle">Exclusive deals and promotions</p>
+          
+          <div className="offers-grid grid grid-2">
+            {specialOffers.map((offer, index) => (
+              <div 
+                key={index}
+                id={`animate-offer-${index}`}
+                className={`offer-card card ${isVisible[`animate-offer-${index}`] ? 'fade-in-up' : ''}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="offer-icon">{offer.icon}</div>
+                <div className="offer-content">
+                  <h3>{offer.title}</h3>
+                  <p className="offer-time">{offer.time}</p>
+                  <p className="offer-description">{offer.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section private-events">
+        <div className="container">
+          <div 
+            id="animate-events" 
+            className={`events-content ${isVisible['animate-events'] ? 'fade-in-up' : ''}`}
+          >
+            <h2 className="section-title">Private Events & Catering</h2>
+            <p className="section-subtitle">
+              Host your special occasion at Savoria. We offer customized menus and 
+              exclusive venue options for weddings, corporate events, and celebrations.
+            </p>
+            <div className="events-features">
+              <div className="event-feature">
+                <span className="feature-icon">🎊</span>
+                <h4>Private Dining Rooms</h4>
+                <p>Intimate spaces for 10-50 guests</p>
+              </div>
+              <div className="event-feature">
+                <span className="feature-icon">🍽️</span>
+                <h4>Custom Menus</h4>
+                <p>Tailored to your preferences</p>
+              </div>
+              <div className="event-feature">
+                <span className="feature-icon">🎭</span>
+                <h4>Full Venue Buyout</h4>
+                <p>Exclusive access for 100+ guests</p>
+              </div>
             </div>
-            <div className="faq-item">
-              <h4 className="faq-question">What forms of payment do you accept?</h4>
-              <p className="faq-answer">
-                We accept cash, all major credit cards, debit cards, and mobile payment options like Apple Pay and Google Pay.
-              </p>
-            </div>
-            <div className="faq-item">
-              <h4 className="faq-question">Can I cancel or reschedule my appointment?</h4>
-              <p className="faq-answer">
-                Yes, you can cancel or reschedule up to 24 hours before your appointment without any fees. Please contact us as soon as possible.
-              </p>
-            </div>
-            <div className="faq-item">
-              <h4 className="faq-question">Are products used on my hair included?</h4>
-              <p className="faq-answer">
-                Yes, all premium styling products used during your service are included in the price. We also offer products for purchase.
-              </p>
-            </div>
+            <Link to="/contact" className="btn btn-primary">
+              Inquire About Events
+            </Link>
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
 
 export default Pricing;

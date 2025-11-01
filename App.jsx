@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Gallery from './pages/Gallery';
-import Stylists from './pages/Stylists';
-import Pricing from './pages/Pricing';
-import About from './pages/About';
-import Contact from './pages/Contact';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import Home from './Home';
+import Menu from './Services';
+import Gallery from './Gallery';
+import Chefs from './Stylists';
+import Pricing from './Pricing';
+import About from './About';
+import Contact from './Contact';
 
 function App() {
   return (
@@ -16,9 +16,9 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
+          <Route path="/menu" element={<Menu />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/stylists" element={<Stylists />} />
+          <Route path="/chefs" element={<Chefs />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

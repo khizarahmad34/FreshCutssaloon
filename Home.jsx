@@ -1,129 +1,255 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
-const Home = () => {
-  const scissorsRef = useRef(null);
+function Home() {
+  const [isVisible, setIsVisible] = useState({});
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      if (scissorsRef.current) {
-        scissorsRef.current.style.transform = `translateY(${scrolled * 0.5}px) rotate(${scrolled * 0.1}deg)`;
-      }
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.querySelectorAll('[id^="animate-"]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
+
+  const features = [
+    {
+      title: 'Fresh Ingredients',
+      description: 'Locally sourced, organic ingredients prepared daily for the finest quality.',
+      icon: '🌿'
+    },
+    {
+      title: 'Expert Chefs',
+      description: 'Award-winning culinary masters crafting exceptional dining experiences.',
+      icon: '👨‍🍳'
+    },
+    {
+      title: 'Elegant Ambiance',
+      description: 'Sophisticated atmosphere perfect for any special occasion.',
+      icon: '✨'
+    },
+    {
+      title: 'Premium Service',
+      description: 'Attentive staff dedicated to making your visit unforgettable.',
+      icon: '🎩'
+    }
+  ];
+
+  const specialties = [
+    {
+      name: 'Grilled Salmon',
+      description: 'Fresh Atlantic salmon with herb butter and seasonal vegetables',
+      price: '$42',
+      image: '🐟'
+    },
+    {
+      name: 'Wagyu Steak',
+      description: 'Premium Japanese beef with truffle mashed potatoes',
+      price: '$68',
+      image: '🥩'
+    },
+    {
+      name: 'Lobster Risotto',
+      description: 'Creamy arborio rice with fresh Maine lobster',
+      price: '$55',
+      image: '🦞'
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: 'Sarah Johnson',
+      role: 'Food Critic',
+      text: 'An extraordinary culinary journey. Every dish is a masterpiece that delights the senses.',
+      rating: 5
+    },
+    {
+      name: 'Michael Chen',
+      role: 'Regular Guest',
+      text: 'The ambiance, service, and food quality are consistently exceptional. My favorite restaurant!',
+      rating: 5
+    },
+    {
+      name: 'Emma Williams',
+      role: 'Event Planner',
+      text: 'Perfect venue for special occasions. The attention to detail is remarkable.',
+      rating: 5
+    }
+  ];
 
   return (
     <div className="home">
+      {/* Hero Section */}
       <section className="hero">
-        <div className="hero-background"></div>
+        <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div className="scissors-animation" ref={scissorsRef}>
-            <svg className="scissors-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <g className="scissor-left">
-                <circle cx="40" cy="60" r="15" fill="var(--electric-blue)" opacity="0.8"/>
-                <path d="M 40 60 L 100 100" stroke="var(--electric-blue)" strokeWidth="4" strokeLinecap="round"/>
-                <path d="M 30 50 L 50 70" stroke="var(--electric-blue)" strokeWidth="3" strokeLinecap="round"/>
-              </g>
-              <g className="scissor-right">
-                <circle cx="160" cy="60" r="15" fill="var(--electric-blue)" opacity="0.8"/>
-                <path d="M 160 60 L 100 100" stroke="var(--electric-blue)" strokeWidth="4" strokeLinecap="round"/>
-                <path d="M 150 50 L 170 70" stroke="var(--electric-blue)" strokeWidth="3" strokeLinecap="round"/>
-              </g>
-              <line x1="90" y1="90" x2="110" y2="110" stroke="var(--electric-blue)" strokeWidth="5" strokeLinecap="round"/>
-              <path className="cutting-line" d="M 100 120 L 100 180" stroke="var(--electric-blue)" strokeWidth="2" strokeDasharray="5,5"/>
-            </svg>
+          <div className="container">
+            <h1 className="hero-title fade-in-up">
+              Experience Culinary
+              <span className="hero-highlight"> Excellence</span>
+            </h1>
+            <p className="hero-subtitle fade-in-up delay-2">
+              Where passion meets perfection in every dish
+            </p>
+            <div className="hero-buttons fade-in-up delay-3">
+              <Link to="/menu" className="btn btn-primary">Explore Menu</Link>
+              <Link to="/contact" className="btn btn-secondary">Reserve Table</Link>
+            </div>
           </div>
-
-          <h1 className="hero-title">
-            <span className="hero-line">Look Sharp.</span>
-            <span className="hero-line glow-text">Feel Confident.</span>
-          </h1>
-          <p className="hero-subtitle">Premium cuts for the modern gentleman</p>
-          <button className="cta-button">Book Appointment</button>
+        </div>
+        <div className="hero-scroll">
+          <span>Scroll Down</span>
+          <div className="scroll-indicator"></div>
         </div>
       </section>
 
-      <section className="section features">
+      {/* Welcome Section */}
+      <section className="section welcome-section">
         <div className="container">
-          <h2 className="section-title">Why Choose FreshCuts</h2>
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">✂️</div>
-              <h3>Expert Stylists</h3>
-              <p>Trained professionals with years of experience in modern hairstyling</p>
+          <div className="welcome-grid">
+            <div 
+              id="animate-welcome-content" 
+              className={`welcome-content ${isVisible['animate-welcome-content'] ? 'fade-in-up' : ''}`}
+            >
+              <h2 className="section-title">Welcome to Savoria</h2>
+              <div className="accent-line"></div>
+              <p className="welcome-text">
+                For over two decades, Savoria has been the pinnacle of fine dining, 
+                offering an unparalleled gastronomic experience. Our commitment to 
+                excellence, innovation, and tradition creates unforgettable moments 
+                for every guest.
+              </p>
+              <p className="welcome-text">
+                Led by our award-winning culinary team, we source the finest ingredients 
+                from local farms and international markets to craft dishes that celebrate 
+                both classic techniques and modern creativity.
+              </p>
+              <Link to="/about" className="btn btn-primary">Our Story</Link>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon">⚡</div>
-              <h3>Premium Service</h3>
-              <p>Top-tier grooming experience with attention to every detail</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🎯</div>
-              <h3>Modern Styles</h3>
-              <p>Latest trends and timeless classics for every personality</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">⭐</div>
-              <h3>Quality Products</h3>
-              <p>Only the finest grooming products for optimal results</p>
+            <div 
+              id="animate-welcome-image" 
+              className={`welcome-image ${isVisible['animate-welcome-image'] ? 'scale-in delay-2' : ''}`}
+            >
+              <div className="image-placeholder">
+                <span className="placeholder-icon">🍽️</span>
+                <p>Elegant Dining Experience</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section showcase">
+      {/* Features Section */}
+      <section className="section features-section">
         <div className="container">
-          <h2 className="section-title">Our Signature Services</h2>
-          <div className="showcase-grid">
-            <div className="showcase-item">
-              <div className="showcase-image" style={{
-                backgroundImage: `url('https://images.pexels.com/photos/1319460/pexels-photo-1319460.jpeg?auto=compress&cs=tinysrgb&w=800')`
-              }}>
-                <div className="showcase-overlay">
-                  <h3>Premium Haircut</h3>
-                  <p>Precision cuts tailored to your style</p>
-                </div>
+          <h2 className="section-title">Why Choose Savoria</h2>
+          <p className="section-subtitle">Excellence in every detail</p>
+          <div className="features-grid grid grid-4">
+            {features.map((feature, index) => (
+              <div 
+                key={index}
+                id={`animate-feature-${index}`}
+                className={`feature-card card ${isVisible[`animate-feature-${index}`] ? 'fade-in-up' : ''}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="feature-icon">{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
               </div>
-            </div>
-            <div className="showcase-item">
-              <div className="showcase-image" style={{
-                backgroundImage: `url('https://t4.ftcdn.net/jpg/16/26/82/87/360_F_1626828739_fQF8aiPus7dyyXaKyDVeTl5jjlvnWJhC.jpg')`
-              }}>
-                <div className="showcase-overlay">
-                  <h3>Beard Grooming</h3>
-                  <p>Expert shaping and styling</p>
-                </div>
-              </div>
-            </div>
-            <div className="showcase-item">
-              <div className="showcase-image" style={{
-                backgroundImage: `url('https://t3.ftcdn.net/jpg/15/43/42/28/360_F_1543422854_YoIEZJcx7TiFr7RrYU5kJifTTiZXLyM1.jpg')`
-              }}>
-                <div className="showcase-overlay">
-                  <h3>Hot Towel Shave</h3>
-                  <p>Traditional luxury experience</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Specialties Section */}
+      <section className="section specialties-section">
+        <div className="container">
+          <h2 className="section-title">Chef's Specialties</h2>
+          <p className="section-subtitle">Signature dishes crafted with passion</p>
+          <div className="specialties-grid grid grid-3">
+            {specialties.map((dish, index) => (
+              <div 
+                key={index}
+                id={`animate-specialty-${index}`}
+                className={`specialty-card card ${isVisible[`animate-specialty-${index}`] ? 'scale-in' : ''}`}
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className="specialty-image">
+                  <span className="specialty-emoji">{dish.image}</span>
+                </div>
+                <div className="specialty-content">
+                  <div className="specialty-header">
+                    <h3>{dish.name}</h3>
+                    <span className="specialty-price">{dish.price}</span>
+                  </div>
+                  <p>{dish.description}</p>
+                  <Link to="/menu" className="specialty-link">View Full Menu →</Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="section testimonials-section">
+        <div className="container">
+          <h2 className="section-title">What Our Guests Say</h2>
+          <p className="section-subtitle">Experiences that speak for themselves</p>
+          <div className="testimonials-grid grid grid-3">
+            {testimonials.map((testimonial, index) => (
+              <div 
+                key={index}
+                id={`animate-testimonial-${index}`}
+                className={`testimonial-card card ${isVisible[`animate-testimonial-${index}`] ? 'fade-in-up' : ''}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="testimonial-stars">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i}>⭐</span>
+                  ))}
+                </div>
+                <p className="testimonial-text">"{testimonial.text}"</p>
+                <div className="testimonial-author">
+                  <div className="author-avatar">{testimonial.name.charAt(0)}</div>
+                  <div className="author-info">
+                    <h4>{testimonial.name}</h4>
+                    <p>{testimonial.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
       <section className="section cta-section">
         <div className="container">
-          <div className="cta-content">
-            <h2 className="cta-title">Ready for Your Transformation?</h2>
-            <p className="cta-text">Join thousands of satisfied clients who trust FreshCuts</p>
-            <button className="cta-button-large">Schedule Your Appointment</button>
+          <div 
+            id="animate-cta" 
+            className={`cta-content ${isVisible['animate-cta'] ? 'scale-in' : ''}`}
+          >
+            <h2>Ready for an Unforgettable Experience?</h2>
+            <p>Reserve your table today and discover why Savoria is the destination for fine dining.</p>
+            <Link to="/contact" className="btn btn-primary btn-large">Make a Reservation</Link>
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
 
 export default Home;

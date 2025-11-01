@@ -1,287 +1,281 @@
+.pricing-page {
+  padding-top: 80px;
+}
+
 .pricing-hero {
-  padding: calc(var(--spacing-unit) * 15) 0 calc(var(--spacing-unit) * 8);
-  text-align: center;
-  background: linear-gradient(135deg, var(--dark-gray) 0%, var(--matte-black) 100%);
   position: relative;
+  height: 50vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  text-align: center;
   overflow: hidden;
 }
 
 .pricing-hero::before {
   content: '';
   position: absolute;
-  bottom: -50%;
-  right: -20%;
-  width: 80%;
-  height: 80%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 30% 50%, rgba(201, 169, 97, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%);
+  animation: float 8s ease-in-out infinite;
 }
 
-.services-pricing-section {
-  background: var(--matte-black);
+.pricing-hero h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
-.pricing-menu {
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 2);
+.pricing-hero p {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--gray-text);
+  position: relative;
+  z-index: 2;
 }
 
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 3);
-  padding: calc(var(--spacing-unit) * 2);
-  background: var(--dark-gray);
-  border-radius: 10px;
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  transition: all 0.3s ease;
-  animation: fadeInUp 0.4s ease-out forwards;
-  opacity: 0;
+.packages-section {
+  background: var(--dark-bg);
 }
 
-.menu-item:hover {
-  border-color: var(--electric-blue);
-  box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
-  transform: translateX(10px);
-}
-
-.menu-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 0.5);
-  flex-shrink: 0;
-}
-
-.menu-item-name {
-  font-size: 1.1rem;
-  color: var(--white);
-  font-weight: 600;
-}
-
-.menu-item-duration {
-  font-size: 0.85rem;
-  color: var(--electric-blue);
-}
-
-.menu-item-line {
-  flex-grow: 1;
-  height: 1px;
-  background: linear-gradient(to right, rgba(0, 212, 255, 0.3), transparent);
-  margin: 0 calc(var(--spacing-unit) * 2);
-}
-
-.menu-item-price {
-  font-size: 1.5rem;
-  font-family: 'Bebas Neue', cursive;
-  color: var(--electric-blue);
-  letter-spacing: 1px;
-  flex-shrink: 0;
-}
-
-.memberships-section {
-  background: var(--dark-gray);
-}
-
-.memberships-subtitle {
-  text-align: center;
-  color: var(--light-gray);
-  font-size: 1.2rem;
-  margin-bottom: calc(var(--spacing-unit) * 6);
-}
-
-.memberships-grid {
+.packages-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: calc(var(--spacing-unit) * 4);
-  max-width: 1100px;
-  margin: 0 auto;
+  gap: 2.5rem;
+  margin-top: 3rem;
 }
 
-.membership-card {
-  background: var(--matte-black);
-  border-radius: 15px;
-  padding: calc(var(--spacing-unit) * 4);
-  border: 2px solid rgba(0, 212, 255, 0.2);
-  transition: all 0.4s ease;
+.package-card {
+  padding: 2.5rem 2rem;
+  text-align: center;
   position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.membership-card.featured {
-  border-color: var(--electric-blue);
-  box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+.package-card.popular {
+  border: 2px solid var(--primary-color);
   transform: scale(1.05);
+  box-shadow: 0 20px 50px rgba(201, 169, 97, 0.2);
 }
 
-.membership-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  border-color: var(--electric-blue);
-  box-shadow: 0 15px 50px rgba(0, 212, 255, 0.4);
-}
-
-.membership-card.featured:hover {
-  transform: translateY(-10px) scale(1.07);
-}
-
-.membership-ribbon {
+.popular-badge {
   position: absolute;
-  top: 20px;
-  right: -35px;
-  background: var(--electric-blue);
-  color: var(--matte-black);
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 5);
-  transform: rotate(45deg);
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: var(--dark-bg);
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
   font-weight: 700;
   font-size: 0.85rem;
+  text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 0 20px var(--electric-blue-glow);
 }
 
-.membership-header {
-  text-align: center;
-  padding-bottom: calc(var(--spacing-unit) * 3);
-  margin-bottom: calc(var(--spacing-unit) * 3);
-  border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+.package-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
 }
 
-.membership-name {
-  font-size: 2.5rem;
-  margin-bottom: calc(var(--spacing-unit) * 2);
-  color: var(--white);
+.package-card h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--light-text);
 }
 
-.membership-price {
+.package-price {
   display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: calc(var(--spacing-unit) * 1);
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.price-amount {
+.price {
   font-size: 3.5rem;
-  color: var(--electric-blue);
-  font-family: 'Bebas Neue', cursive;
-  letter-spacing: 2px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
 }
 
-.price-period {
-  font-size: 1.2rem;
-  color: var(--light-gray);
+.period {
+  font-size: 0.9rem;
+  color: var(--gray-text);
+  margin-top: 0.5rem;
 }
 
-.membership-benefits {
+.package-description {
+  color: var(--gray-text);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.package-features {
   list-style: none;
-  margin-bottom: calc(var(--spacing-unit) * 4);
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex: 1;
 }
 
-.membership-benefits li {
-  padding: calc(var(--spacing-unit) * 1.5) 0;
-  color: var(--light-gray);
-  position: relative;
-  padding-left: calc(var(--spacing-unit) * 4);
-  line-height: 1.6;
+.package-features li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  text-align: left;
 }
 
-.membership-benefits li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--electric-blue);
+.package-features li:last-child {
+  border-bottom: none;
+}
+
+.check-icon {
+  color: var(--primary-color);
   font-weight: 700;
   font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
-.membership-button {
-  width: 100%;
-  background: var(--electric-blue);
-  color: var(--matte-black);
-  padding: calc(var(--spacing-unit) * 2);
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
+.offers-section {
+  background: linear-gradient(180deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
 }
 
-.membership-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+.offers-grid {
+  margin-top: 3rem;
 }
 
-.faq-section {
-  background: var(--matte-black);
+.offer-card {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+  align-items: flex-start;
 }
 
-.faq-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: calc(var(--spacing-unit) * 4);
-  max-width: 1000px;
+.offer-icon {
+  font-size: 3.5rem;
+  flex-shrink: 0;
+}
+
+.offer-content {
+  flex: 1;
+}
+
+.offer-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--light-text);
+}
+
+.offer-time {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.private-events {
+  background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(212, 175, 55, 0.1));
+}
+
+.events-content {
+  text-align: center;
+  max-width: 900px;
   margin: 0 auto;
 }
 
-.faq-item {
-  background: var(--dark-gray);
-  padding: calc(var(--spacing-unit) * 4);
+.events-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.event-feature {
+  padding: 2rem;
+  background: rgba(37, 37, 37, 0.5);
+  backdrop-filter: blur(10px);
   border-radius: 15px;
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  transition: var(--transition-smooth);
 }
 
-.faq-item:hover {
-  border-color: var(--electric-blue);
-  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+.event-feature:hover {
   transform: translateY(-5px);
+  border-color: var(--primary-color);
 }
 
-.faq-question {
+.feature-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.event-feature h4 {
   font-size: 1.3rem;
-  color: var(--electric-blue);
-  margin-bottom: calc(var(--spacing-unit) * 2);
-  font-family: 'Bebas Neue', cursive;
-  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
 }
 
-.faq-answer {
-  color: var(--light-gray);
-  line-height: 1.8;
-  font-size: 1rem;
+.event-feature p {
+  font-size: 0.95rem;
+  margin: 0;
 }
 
-@media (max-width: 768px) {
-  .pricing-menu {
-    gap: calc(var(--spacing-unit) * 1.5);
-  }
-
-  .menu-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: calc(var(--spacing-unit) * 2);
-  }
-
-  .menu-item-line {
-    display: none;
-  }
-
-  .menu-item-price {
-    align-self: flex-end;
-  }
-
-  .memberships-grid {
+@media (max-width: 968px) {
+  .packages-grid {
     grid-template-columns: 1fr;
+    gap: 3rem;
   }
 
-  .membership-card.featured {
+  .package-card.popular {
     transform: scale(1);
   }
 
-  .membership-card.featured:hover {
-    transform: translateY(-10px) scale(1.02);
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pricing-hero {
+    height: 40vh;
+    min-height: 300px;
   }
 
-  .faq-grid {
+  .package-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .offer-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .events-features {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

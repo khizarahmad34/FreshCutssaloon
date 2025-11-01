@@ -1,66 +1,96 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Gallery.css';
 
-const Gallery = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+function Gallery() {
+  const [isVisible, setIsVisible] = useState({});
+  const [activeFilter, setActiveFilter] = useState('all');
 
-  const images = [
-    { url: 'https://t3.ftcdn.net/jpg/05/06/74/32/240_F_506743235_coW6QAlhxlBWjnRk0VNsHqaXGGH9F4JS.jpg', category: 'haircuts' },
-    { url: 'https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg?auto=compress&cs=tinysrgb&w=600', category: 'haircuts' },
-    { url: 'https://t4.ftcdn.net/jpg/06/33/49/61/240_F_633496108_MIw6cNitWmeQ5yquQ8MT5eUOfkIHn80n.jpg', category: 'beards' },
-    { url: 'https://t3.ftcdn.net/jpg/02/55/82/18/240_F_255821857_qp4mqZsi0iPs8YtfDBCAyda6p9OK3cKk.jpg', category: 'shaves' },
-    { url: 'https://t3.ftcdn.net/jpg/02/20/42/04/240_F_220420494_lUoekkrbqjp4ZZRFrCBJEQ2h2K2ERvJ2.jpg', category: 'styling' },
-    { url: 'https://t4.ftcdn.net/jpg/04/69/68/17/240_F_469681744_FZWt6LKXLoCU4XVv8Cjx6ZFmwNlNLm7x.jpg', category: 'haircuts' },
-    { url: 'https://t3.ftcdn.net/jpg/02/68/41/00/240_F_268410070_ZXKvJFXNH8TisPaDna19SqFaoJ4sshxH.jpg', category: 'beards' },
-    { url: 'https://t4.ftcdn.net/jpg/06/72/98/93/240_F_672989351_Xt1qOnx7YsC7k4yOp76aNRQ968cRJ5Vk.jpg', category: 'styling' },
-    { url: 'https://t3.ftcdn.net/jpg/01/35/35/32/240_F_135353252_KrrqfRsbhgSggJXwu6APWUaXKhO8jYFu.jpg', category: 'haircuts' },
-    { url: 'https://t4.ftcdn.net/jpg/02/25/23/97/240_F_225239767_9yR1wKHuj7dgWNg4GzT4peIxMva14DY4.jpg', category: 'shaves' },
-    { url: 'https://t3.ftcdn.net/jpg/11/36/14/40/240_F_1136144072_OPmo46myEzyxZlp1IwUwwGQS2zkpy1Dk.jpg', category: 'styling' },
-    { url: 'https://t4.ftcdn.net/jpg/12/77/87/03/240_F_1277870380_OcFYBaKMnGEUs341HFwRMUkmVGlJH29x.jpg', category: 'beards' }
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[id^="animate-"]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const filters = [
+    { id: 'all', name: 'All' },
+    { id: 'dishes', name: 'Dishes' },
+    { id: 'ambiance', name: 'Ambiance' },
+    { id: 'events', name: 'Events' }
   ];
 
-  const categories = [
-    { id: 'all', label: 'All Work' },
-    { id: 'haircuts', label: 'Haircuts' },
-    { id: 'beards', label: 'Beards' },
-    { id: 'shaves', label: 'Shaves' },
-    { id: 'styling', label: 'Styling' }
+  const galleryItems = [
+    { category: 'dishes', title: 'Wagyu Steak', icon: '🥩', color: '#c9a961' },
+    { category: 'ambiance', title: 'Elegant Dining', icon: '🕯️', color: '#d4af37' },
+    { category: 'dishes', title: 'Fresh Salmon', icon: '🐟', color: '#8b6f47' },
+    { category: 'events', title: 'Private Events', icon: '🎉', color: '#c9a961' },
+    { category: 'dishes', title: 'Lobster Risotto', icon: '🦞', color: '#d4af37' },
+    { category: 'ambiance', title: 'Bar Area', icon: '🍸', color: '#8b6f47' },
+    { category: 'dishes', title: 'Dessert Selection', icon: '🍰', color: '#c9a961' },
+    { category: 'events', title: 'Wine Tasting', icon: '🍷', color: '#d4af37' },
+    { category: 'ambiance', title: 'Outdoor Seating', icon: '🌿', color: '#8b6f47' },
+    { category: 'dishes', title: 'Appetizers', icon: '🍞', color: '#c9a961' },
+    { category: 'events', title: 'Chef\'s Table', icon: '👨‍🍳', color: '#d4af37' },
+    { category: 'ambiance', title: 'Interior Design', icon: '✨', color: '#8b6f47' }
   ];
 
-  const filteredImages = selectedCategory === 'all'
-    ? images
-    : images.filter(img => img.category === selectedCategory);
+  const filteredItems = activeFilter === 'all' 
+    ? galleryItems 
+    : galleryItems.filter(item => item.category === activeFilter);
 
   return (
     <div className="gallery-page">
       <section className="gallery-hero">
+        <div className="overlay"></div>
         <div className="container">
-          <h1 className="page-title fade-in-up">Our Gallery</h1>
-          <p className="page-subtitle fade-in-up">Showcasing our finest work and transformations</p>
+          <h1 className="fade-in-up">Gallery</h1>
+          <p className="fade-in-up delay-2">A visual journey through our culinary artistry</p>
         </div>
       </section>
 
       <section className="section gallery-section">
         <div className="container">
-          <div className="gallery-filters">
-            {categories.map(cat => (
+          <div className="gallery-filters fade-in-up">
+            {filters.map((filter) => (
               <button
-                key={cat.id}
-                className={`filter-button ${selectedCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat.id)}
+                key={filter.id}
+                className={`filter-btn ${activeFilter === filter.id ? 'active' : ''}`}
+                onClick={() => setActiveFilter(filter.id)}
               >
-                {cat.label}
+                {filter.name}
               </button>
             ))}
           </div>
 
           <div className="gallery-grid">
-            {filteredImages.map((image, index) => (
-              <div key={index} className="gallery-item" style={{ animationDelay: `${index * 0.05}s` }}>
-                <div className="gallery-image" style={{ backgroundImage: `url(${image.url})` }}>
-                  <div className="gallery-overlay">
-                    <div className="gallery-icon">+</div>
-                  </div>
+            {filteredItems.map((item, index) => (
+              <div 
+                key={index}
+                id={`animate-gallery-${index}`}
+                className={`gallery-item ${isVisible[`animate-gallery-${index}`] ? 'scale-in' : ''}`}
+                style={{ 
+                  animationDelay: `${(index % 12) * 0.05}s`,
+                  background: `linear-gradient(135deg, ${item.color}15, ${item.color}05)`
+                }}
+              >
+                <div className="gallery-item-content">
+                  <span className="gallery-icon">{item.icon}</span>
+                  <h3>{item.title}</h3>
+                </div>
+                <div className="gallery-item-overlay">
+                  <span className="view-text">View</span>
                 </div>
               </div>
             ))}
@@ -68,47 +98,20 @@ const Gallery = () => {
         </div>
       </section>
 
-      <section className="section testimonials-section">
+      <section className="section gallery-cta">
         <div className="container">
-          <h2 className="section-title">What Our Clients Say</h2>
-          <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <div className="stars">★★★★★</div>
-              <p className="testimonial-text">
-                "Best haircut I've ever had! The attention to detail is incredible. Highly recommend FreshCuts!"
-              </p>
-              <div className="testimonial-author">
-                <strong>Mike Johnson</strong>
-                <span>Regular Client</span>
-              </div>
-            </div>
-
-            <div className="testimonial-card">
-              <div className="stars">★★★★★</div>
-              <p className="testimonial-text">
-                "Professional service, modern atmosphere, and skilled barbers. Worth every penny!"
-              </p>
-              <div className="testimonial-author">
-                <strong>David Chen</strong>
-                <span>VIP Member</span>
-              </div>
-            </div>
-
-            <div className="testimonial-card">
-              <div className="stars">★★★★★</div>
-              <p className="testimonial-text">
-                "Been coming here for 2 years. Consistently excellent cuts and great vibes!"
-              </p>
-              <div className="testimonial-author">
-                <strong>Ryan Miller</strong>
-                <span>Loyal Customer</span>
-              </div>
-            </div>
+          <div 
+            id="animate-cta" 
+            className={`cta-content ${isVisible['animate-cta'] ? 'scale-in' : ''}`}
+          >
+            <h2>Experience It Yourself</h2>
+            <p>Visit us and create your own memorable moments</p>
+            <a href="/contact" className="btn btn-primary">Reserve Your Table</a>
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
 
 export default Gallery;

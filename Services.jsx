@@ -1,75 +1,181 @@
+import { useState, useEffect } from 'react';
 import './Services.css';
 
-const Services = () => {
-  const services = [
+function Menu() {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[id^="animate-"]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const categories = [
+    { id: 'all', name: 'All' },
+    { id: 'appetizers', name: 'Appetizers' },
+    { id: 'mains', name: 'Main Course' },
+    { id: 'desserts', name: 'Desserts' },
+    { id: 'beverages', name: 'Beverages' }
+  ];
+
+  const menuItems = [
     {
-      title: 'Classic Haircut',
-      description: 'Precision cutting and styling for a timeless look',
-      price: '$35',
-      duration: '30 min',
-      image: 'https://images.pexels.com/photos/1319460/pexels-photo-1319460.jpeg?auto=compress&cs=tinysrgb&w=600'
+      category: 'appetizers',
+      name: 'Truffle Bruschetta',
+      description: 'Toasted artisan bread with truffle oil, fresh tomatoes, and basil',
+      price: '$18',
+      icon: '🍞'
     },
     {
-      title: 'Premium Cut & Style',
-      description: 'Complete haircut with premium styling products',
-      price: '$50',
-      duration: '45 min',
-      image: 'https://images.pexels.com/photos/1570807/pexels-photo-1570807.jpeg?auto=compress&cs=tinysrgb&w=600'
+      category: 'appetizers',
+      name: 'Seared Scallops',
+      description: 'Pan-seared scallops with cauliflower puree and microgreens',
+      price: '$24',
+      icon: '🦪'
     },
     {
-      title: 'Beard Trim & Shape',
-      description: 'Expert beard grooming and shaping',
-      price: '$25',
-      duration: '20 min',
-      image: 'https://images.pexels.com/photos/5853395/pexels-photo-5853395.jpeg?auto=compress&cs=tinysrgb&w=600'
+      category: 'appetizers',
+      name: 'Caesar Salad',
+      description: 'Classic Caesar with parmesan crisps and house-made dressing',
+      price: '$16',
+      icon: '🥗'
     },
     {
-      title: 'Hot Towel Shave',
-      description: 'Traditional straight razor shave with hot towel treatment',
-      price: '$40',
-      duration: '30 min',
-      image: 'https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600'
+      category: 'mains',
+      name: 'Wagyu Beef Steak',
+      description: 'Premium Japanese beef with truffle mashed potatoes and asparagus',
+      price: '$68',
+      icon: '🥩'
     },
     {
-      title: 'Hair Coloring',
-      description: 'Professional hair coloring and highlights',
-      price: '$75',
-      duration: '90 min',
-      image: 'https://t3.ftcdn.net/jpg/04/86/70/98/360_F_486709876_REbUj7ZkLqUOzEVmQ00SoHeboS44PJSU.jpg'
+      category: 'mains',
+      name: 'Grilled Salmon',
+      description: 'Fresh Atlantic salmon with herb butter and seasonal vegetables',
+      price: '$42',
+      icon: '🐟'
     },
     {
-      title: 'Scalp Treatment',
-      description: 'Relaxing scalp massage and treatment',
-      price: '$30',
-      duration: '25 min',
-      image: 'https://images.pexels.com/photos/7447128/pexels-photo-7447128.jpeg?auto=compress&cs=tinysrgb&w=600'
+      category: 'mains',
+      name: 'Lobster Risotto',
+      description: 'Creamy arborio rice with fresh Maine lobster and saffron',
+      price: '$55',
+      icon: '🦞'
+    },
+    {
+      category: 'mains',
+      name: 'Duck Confit',
+      description: 'Slow-cooked duck leg with orange glaze and roasted root vegetables',
+      price: '$48',
+      icon: '🦆'
+    },
+    {
+      category: 'mains',
+      name: 'Mushroom Risotto',
+      description: 'Wild mushroom risotto with truffle oil and parmesan (Vegetarian)',
+      price: '$38',
+      icon: '🍄'
+    },
+    {
+      category: 'desserts',
+      name: 'Chocolate Lava Cake',
+      description: 'Warm chocolate cake with molten center and vanilla ice cream',
+      price: '$14',
+      icon: '🍫'
+    },
+    {
+      category: 'desserts',
+      name: 'Crème Brûlée',
+      description: 'Classic French custard with caramelized sugar and fresh berries',
+      price: '$12',
+      icon: '🍮'
+    },
+    {
+      category: 'desserts',
+      name: 'Tiramisu',
+      description: 'Traditional Italian dessert with espresso and mascarpone',
+      price: '$13',
+      icon: '🍰'
+    },
+    {
+      category: 'beverages',
+      name: 'House Wine Selection',
+      description: 'Curated selection of red and white wines from around the world',
+      price: '$12-45',
+      icon: '🍷'
+    },
+    {
+      category: 'beverages',
+      name: 'Craft Cocktails',
+      description: 'Signature cocktails crafted by our expert mixologists',
+      price: '$16-22',
+      icon: '🍸'
+    },
+    {
+      category: 'beverages',
+      name: 'Artisan Coffee',
+      description: 'Freshly brewed specialty coffee and espresso drinks',
+      price: '$5-8',
+      icon: '☕'
     }
   ];
 
+  const filteredItems = activeCategory === 'all' 
+    ? menuItems 
+    : menuItems.filter(item => item.category === activeCategory);
+
   return (
-    <div className="services-page">
-      <section className="services-hero">
+    <div className="menu-page">
+      <section className="menu-hero">
+        <div className="overlay"></div>
         <div className="container">
-          <h1 className="page-title fade-in-up">Our Services</h1>
-          <p className="page-subtitle fade-in-up">Premium grooming experiences tailored for you</p>
+          <h1 className="fade-in-up">Our Menu</h1>
+          <p className="fade-in-up delay-2">Culinary masterpieces crafted with passion</p>
         </div>
       </section>
 
-      <section className="section services-section">
+      <section className="section menu-section">
         <div className="container">
-          <div className="services-grid">
-            {services.map((service, index) => (
-              <div key={index} className="service-card" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="service-image" style={{ backgroundImage: `url(${service.image})` }}>
-                  <div className="service-badge">{service.duration}</div>
-                </div>
-                <div className="service-content">
-                  <h3 className="service-title">{service.title}</h3>
-                  <p className="service-description">{service.description}</p>
-                  <div className="service-footer">
-                    <span className="service-price">{service.price}</span>
-                    <button className="service-button">Book Now</button>
+          <div className="menu-categories fade-in-up">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                className={`category-btn ${activeCategory === category.id ? 'active' : ''}`}
+                onClick={() => setActiveCategory(category.id)}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+
+          <div className="menu-grid grid grid-2">
+            {filteredItems.map((item, index) => (
+              <div 
+                key={index}
+                id={`animate-menu-${index}`}
+                className={`menu-item card ${isVisible[`animate-menu-${index}`] ? 'fade-in-up' : ''}`}
+                style={{ animationDelay: `${(index % 6) * 0.1}s` }}
+              >
+                <div className="menu-item-icon">{item.icon}</div>
+                <div className="menu-item-content">
+                  <div className="menu-item-header">
+                    <h3>{item.name}</h3>
+                    <span className="menu-item-price">{item.price}</span>
                   </div>
+                  <p>{item.description}</p>
                 </div>
               </div>
             ))}
@@ -77,60 +183,17 @@ const Services = () => {
         </div>
       </section>
 
-      <section className="section packages-section">
+      <section className="section menu-cta">
         <div className="container">
-          <h2 className="section-title">Package Deals</h2>
-          <div className="packages-grid">
-            <div className="package-card">
-              <div className="package-header">
-                <h3>Essential</h3>
-                <div className="package-price">$85</div>
-              </div>
-              <ul className="package-features">
-                <li>Premium Haircut</li>
-                <li>Beard Trim</li>
-                <li>Hot Towel Treatment</li>
-                <li>Styling Products</li>
-              </ul>
-              <button className="package-button">Select Package</button>
-            </div>
-
-            <div className="package-card featured">
-              <div className="package-ribbon">Popular</div>
-              <div className="package-header">
-                <h3>Deluxe</h3>
-                <div className="package-price">$120</div>
-              </div>
-              <ul className="package-features">
-                <li>Premium Haircut & Style</li>
-                <li>Hot Towel Shave</li>
-                <li>Scalp Treatment</li>
-                <li>Beard Grooming</li>
-                <li>Premium Products</li>
-              </ul>
-              <button className="package-button">Select Package</button>
-            </div>
-
-            <div className="package-card">
-              <div className="package-header">
-                <h3>Ultimate</h3>
-                <div className="package-price">$180</div>
-              </div>
-              <ul className="package-features">
-                <li>Premium Cut & Style</li>
-                <li>Hair Coloring</li>
-                <li>Hot Towel Shave</li>
-                <li>Scalp Treatment</li>
-                <li>Beard Grooming</li>
-                <li>Complimentary Drink</li>
-              </ul>
-              <button className="package-button">Select Package</button>
-            </div>
+          <div className="cta-content scale-in">
+            <h2>Ready to Experience Our Cuisine?</h2>
+            <p>Reserve your table and let us take you on a culinary journey</p>
+            <a href="/contact" className="btn btn-primary">Make a Reservation</a>
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
 
-export default Services;
+export default Menu;

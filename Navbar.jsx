@@ -1,48 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/services', label: 'Services' },
-    { path: '/gallery', label: 'Gallery' },
-    { path: '/stylists', label: 'Stylists' },
-    { path: '/pricing', label: 'Pricing' },
+    { path: '/menu', label: 'Menu' },
     { path: '/about', label: 'About' },
+    { path: '/chefs', label: 'Chefs' },
+    { path: '/gallery', label: 'Gallery' },
     { path: '/contact', label: 'Contact' }
   ];
 
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <Link to="/" className="nav-logo">
-          <span className="logo-text">FRESH</span>
-          <span className="logo-cuts">CUTS</span>
-        </Link>
+    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="container">
+        <div className="navbar-content">
+          <Link to="/" className="navbar-logo">
+            <span className="logo-text">Savoria</span>
+            <span className="logo-tagline">Fine Dining</span>
+          </Link>
 
-        <div className={`nav-menu ${isOpen ? 'active' : ''}`}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <ul className={`navbar-links ${isMobileMenuOpen ? 'active' : ''}`}>
+            {navLinks.map((link, index) => (
+              <li key={link.path} className="navbar-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                <Link 
+                  to={link.path} 
+                  className={`navbar-link ${location.pathname === link.path ? 'active' : ''}`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            <li className="navbar-item navbar-cta">
+              <Link to="/contact" className="btn btn-primary btn-small">Reserve Table</Link>
+            </li>
+          </ul>
+
+          <button 
+            className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
-
-        <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
-          <span className={`hamburger ${isOpen ? 'active' : ''}`}></span>
-        </button>
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;
